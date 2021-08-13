@@ -1,0 +1,71 @@
+Import-Module ActiveDirectory
+
+	New-ADOrganizationalUnit "Sales"
+		New-ADOrganizationalUnit "SalesUsers" -Path "ou=Sales, dc=ppolsinelli, dc=local"
+			New-AdUser -Name "Martha Stewart" -GivenName "Martha" -Surname "Stewart" -SamAccountName "SalesUser1" -DisplayName "Stewart" -Path "ou=SalesUsers, ou=Sales, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Groups" -Path "ou=Sales, dc=ppolsinelli, dc=local"
+			Add-ADGroupMember -Identity SalesUsers -Members SalesUser1
+		New-ADOrganizationalUnit "Computers" -Path "ou=Sales, dc=ppolsinelli, dc=local"
+			New-ADComputer -Name "Computer1" -SAMAccountName "SalesComputer1" -Path "ou=Computers, ou=Sales, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Resources" -Path "ou=Sales, dc=ppolsinelli, dc=local"
+			Add-PrinterPort -PortNumber "9100"  ##Name: DomainPrinterPort   PrinterHostAddress: 192.68.0.5##
+			Add-Printer -Name "SalesPrinter1" -DriverName "Microsoft XPS Document Writer v4" -PortName "9100"
+
+	New-ADOrganizationalUnit "IT"
+		New-ADOrganizationalUnit "Users" -Path "ou=IT, dc=ppolsinelli, dc=local"
+			New-AdUser -Name "Dwight Eisenhower" -GivenName "Dwight" -Surname "Eisenhower" -SamAccountName "Administrator$" -DisplayName "Eisenhower" -Path " ou=Users, ou=IT, dc=ppolsinelli, dc=local"
+			New-AdUser -Name "Paul Polsinelli" -GivenName "Paul" -Surname "Polsinelli" -SamAccountName "ppolsinelli$" -DisplayName "Polsinelli" -Path "ou=Users, ou=IT, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Groups" -Path "ou=IT, dc=ppolsinelli, dc=local"
+			New-ADGroup "Helpdesk" -GroupScope DomainLocal -Path "ou=Groups, ou=IT, dc=ppolsinelli, dc=local"
+				Add-ADGroupMember -Identity Helpdesk -Members Administrator$, ppolsinelli$
+			New-ADGroup "SalesIT" -GroupScope DomainLocal -Path "ou=Groups, ou=IT, dc=ppolsinelli, dc=local"
+				Add-ADGroupMember -Identity SalesIT -Members SalesUser1
+			New-ADGroup "MarketingIT" -GroupScope DomainLocal -Path "ou=Groups, ou=IT, dc=ppolsinelli, dc=local"
+				Add-ADGroupMember -Identity MarketingIT -Members MarketingUser1
+			New-ADGroup "ManagementIT" -GroupScope DomainLocal -Path "ou=Groups, ou=IT, dc=ppolsinelli, dc=local"
+				Add-ADGroupMember -Identity ManagementIT -Members RetailUser1
+			New-ADGroup "RetailIT"	-GroupScope DomainLocal -Path "ou=Groups, ou=IT, dc=ppolsinelli, dc=local"
+				Add-ADGroupMember -Identity RetailIT -Members SalesUser1
+
+	New-ADOrganizationalUnit "Marketing" -Path "ou=Marketing, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Users" -Path "ou=Marketing, dc=ppolsinelli, dc=local"
+			New-AdUser -Name "Albert Einstein" -GivenName "Albert" -Surname "Einstein" -SamAccountName "MarketingUser1" -DisplayName "Einstein" -Path "ou=Users, ou=Marketing, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Groups" -Path "ou=Marketing, dc=ppolsinelli, dc=local"
+			Add-ADGroupMember -Identity Users -Members MarketingUser1
+		New-ADOrganizationalUnit "Computers" -Path "ou=Marketing, dc=ppolsinelli, dc=local"
+			New-ADComputer -Name "Computer2" -SAMAccountName "MarketingComputer1" -Path "ou=Computers, ou=Marketing, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Resources" -Path "ou=Marketing, dc=ppolsinelli, dc=local"
+			Add-PrinterPort -PortNumber "9101"  ##Name: DomainPrinterPort   PrinterHostAddress: 192.68.0.6##
+			Add-Printer -Name "MarketingPrinter1" -DriverName "Microsoft XPS Document Writer v4" -PortName "9101"
+
+	New-ADOrganizationalUnit "Retail" -Path "ou=Retail, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Users" -Path "ou=Retail, dc=ppolsinelli, dc=local"
+			New-AdUser -Name "Elvis Presley" -GivenName "Elvis" -Surname "Presley" -SamAccountName "RetailUser1" -DisplayName "Presley" -Path "ou=Users, ou=Retail, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Groups" -Path "ou=Retail, dc=ppolsinelli, dc=local"
+			Add-ADGroupMember -Identity Users -Members RetailUser1
+		New-ADOrganizationalUnit "Computers" -Path "ou=Retail, dc=ppolsinelli, dc=local"
+			New-ADComputer -Name "Computer3" -SAMAccountName "RetailComputer1" -Path "ou=Computers, ou=Retail, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Resources" -Path "ou=Retail, dc=ppolsinelli, dc=local"
+			Add-PrinterPort -PortNumber "9102"  ##Name: DomainPrinterPort   PrinterHostAddress: 192.68.0.7##
+			Add-Printer -Name "RetailPrinter1" -DriverName "Microsoft XPS Document Writer v4" -PortName "9102"
+			
+	New-ADOrganizationalUnit "Management" -Path "ou=Management, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Users" -Path "ou=Management, dc=ppolsinelli, dc=local"
+			New-AdUser -Name "Marie Curie" -GivenName "Marie" -Surname "Curie" -SamAccountName "ManagementUser1" -DisplayName "Curie" -Path "ou=Users, ou=Management, dc=ppolsinelli, dc=local" -AccountPassword(Read-Host -AsSecureString "Input Password") -Enabled $true ##pswd: IFT220$##
+		New-ADOrganizationalUnit "Groups" -Path "ou=Management, dc=ppolsinelli, dc=local"
+			Add-ADGroupMember -Identity Users -Members ManagementUser1
+		New-ADOrganizationalUnit "Computers" -Path "ou=Management, dc=ppolsinelli, dc=local"
+			New-ADComputer -Name "Computer4" -SAMAccountName "ManagementComputer1" -Path "ou=Computers, ou=Management, dc=ppolsinelli, dc=local"
+		New-ADOrganizationalUnit "Resources" -Path "ou=Management, dc=ppolsinelli, dc=local"
+			Add-PrinterPort -PortNumber "9103"  ##Name: DomainPrinterPort   PrinterHostAddress: 192.68.0.8##
+			Add-Printer -Name "ManagementPrinter1" -DriverName "Microsoft XPS Document Writer v4" -PortName "9103"
+
+
+
+
+
+
+
+
+
+
